@@ -19,3 +19,15 @@
 	height: 100%;
 	width: 0%;
 }
+
+.woothemes-sensei th#num_learners {
+	width: 90px;
+}
+
+.woothemes-sensei th#updated {
+	width: 160px;
+}
+
+.woothemes-sensei th#actions {
+	width: 321px;
+}
