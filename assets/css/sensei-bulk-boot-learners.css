@@ -1,0 +1,21 @@
+/**
+ * Sensei Bulk Boot Learners
+ * http://zao.is
+ *
+ * Copyright (c) 2017 Justin Sternberg
+ * Licensed under the GPL-2.0+ license.
+ */
+
+.boot-loading-row .progress-bar {
+	background: #e8e8e8;
+	height: 1.2em;
+	position: relative;
+	margin: 0 5px;
+}
+
+.boot-loading-row .progress-bar span {
+	background: #46b450;
+	display: block;
+	height: 100%;
+	width: 0%;
+}
