@@ -2,11 +2,11 @@ module.exports = {
 	main: {
 		options: {
 			mode: 'zip',
-			archive: './release/senseiboot.<%= pkg.version %>.zip'
+			archive: './release/sensei-bulk-boot-learners.<%= pkg.version %>.zip'
 		},
 		expand: true,
 		cwd: 'release/<%= pkg.version %>/',
 		src: ['**/*'],
-		dest: 'senseiboot/'
+		dest: 'sensei-bulk-boot-learners/'
 	}
 };
