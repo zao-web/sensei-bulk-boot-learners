@@ -76,6 +76,7 @@ window.SenseiBoot = window.SenseiBoot || {};
 
 		app.xhr = $.post( window.ajaxurl, {
 			'action'     : 'boot_from_course',
+			'nonce'      : app.nonce,
 			'to-process' : app.processSize,
 			'boot-from'  : courseId
 		}, function( response ) {

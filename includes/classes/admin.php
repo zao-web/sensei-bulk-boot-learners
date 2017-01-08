@@ -53,6 +53,7 @@ class Admin {
 		wp_enqueue_style( 'senseiboot-admin', SENSEIBOOT_URL . "assets/css/sensei-bulk-boot-learners{$min}.css", array(), SENSEIBOOT_VERSION );
 		wp_enqueue_script( 'senseiboot-admin', SENSEIBOOT_URL . "assets/js/sensei-bulk-boot-learners{$min}.js", array( 'jquery'	), SENSEIBOOT_VERSION, 1 );
 		wp_localize_script( 'senseiboot-admin', 'SenseiBoot', array(
+			'nonce' => wp_create_nonce( SENSEIBOOT_URL ),
 			'l10n' => array(
 				'ajax_error' => __( 'Sorry, processing encountered an error and was stopped.', 'senseiboot' ),
 				'boot_error' => __( 'Failed to boot all learners from the course.', 'senseiboot' ),
@@ -110,26 +111,29 @@ class Admin {
 	}
 
 	public function ajax_boot_from_course() {
-		if ( ! empty( $_REQUEST['boot-from'] ) ) {
-			timer_start();
-
-			$course_id = absint( $_REQUEST['boot-from'] );
-			$toProcess = ! empty( $_REQUEST['to-process'] ) ? absint( $_REQUEST['to-process'] ) : 50;
-
-			if ( defined( 'QP_DEV' ) && 'QP_DEV' ) {
-				delete_transient( 'sensei_learners_course_learners_'. $course_id );
-			}
-
-			$booted = Boot::learners_from_course( $course_id, $toProcess );
-
-			if ( true === $booted ) {
-				$found = Boot::last_query_found_comments();
-				wp_send_json_success( $found > $toProcess ? $found : false );
-			} else {
-				wp_send_json_error( $booted );
-			}
+		if (
+			empty( $_REQUEST['boot-from'] )
+			|| empty( $_REQUEST['nonce'] )
+			|| ! wp_verify_nonce( $_REQUEST['nonce'], SENSEIBOOT_URL )
+		) {
+			wp_send_json_error();
 		}
 
+		$course_id = absint( $_REQUEST['boot-from'] );
+		$toProcess = ! empty( $_REQUEST['to-process'] ) ? absint( $_REQUEST['to-process'] ) : 50;
+
+		if ( defined( 'QP_DEV' ) && 'QP_DEV' ) {
+			delete_transient( 'sensei_learners_course_learners_'. $course_id );
+		}
+
+		$booted = Boot::learners_from_course( $course_id, $toProcess );
+
+		if ( true === $booted ) {
+			$found = Boot::last_query_found_comments();
+			wp_send_json_success( $found > $toProcess ? $found : false );
+		}
+
+		wp_send_json_error( $booted );
 	}
 
 }
