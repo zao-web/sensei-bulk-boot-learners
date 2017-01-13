@@ -3,7 +3,7 @@
  * Plugin Name: Sensei Bulk Boot Learners
  * Plugin URI:  http://zao.is
  * Description: Provides tools/buttons for bulk booting users from courses
- * Version:     0.1.0
+ * Version:     0.1.1
  * Author:      Justin Sternberg
  * Author URI:  http://zao.is
  * Text Domain: senseiboot
@@ -36,7 +36,7 @@
  */
 
 // Useful global constants
-define( 'SENSEIBOOT_VERSION', '0.1.0.1' );
+define( 'SENSEIBOOT_VERSION', '0.1.1' );
 define( 'SENSEIBOOT_URL',     plugin_dir_url( __FILE__ ) );
 define( 'SENSEIBOOT_PATH',    dirname( __FILE__ ) . '/' );
 define( 'SENSEIBOOT_INC',     SENSEIBOOT_PATH . 'includes/' );

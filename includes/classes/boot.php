@@ -31,6 +31,7 @@ class Boot {
 			'post_id' => $post->ID,
 			'type'    => 'sensei_course_status',
 			'status'  => 'any',
+			'update_comment_meta_cache'  => false,
 		);
 
 		if ( -1 !== $number && absint( $number ) ) {
@@ -38,9 +39,13 @@ class Boot {
 			self::$args['no_found_rows'] = false;
 		}
 
+		self::disable_plugin_comment_query_mods();
 		add_filter( 'pre_get_comments', array( __CLASS__, 'store_query' ) );
+
 		$learners = Sensei_Utils::sensei_check_for_activity( apply_filters( 'sensei_learners_course_learners', self::$args ), true );
+
 		remove_filter( 'pre_get_comments', array( __CLASS__, 'store_query' ) );
+		self::re_enable_plugin_comment_query_mods();
 
 		if ( isset( $learners->user_id ) ) {
 			$learners = array( $learners );
@@ -76,6 +81,54 @@ class Boot {
 
 	public static function last_query_args() {
 		return self::$args;
+	}
+
+	/**
+	 * Removes several plugins' comment query modifications to make our learner query more efficient.
+	 *
+	 * @since  0.1.1
+	 *
+	 * @return void
+	 */
+	protected static function re_enable_plugin_comment_query_mods() {
+		if ( class_exists( 'Tribe__Events__Aggregator__Errors' ) ) {
+			$obj = \Tribe__Events__Aggregator__Errors::instance();
+			add_action( 'pre_get_comments', array( $obj, 'hide_error_comments' ), 10 );
+			add_filter( 'comments_clauses', array( $obj, 'hide_error_comments_pre_41' ), 10, 2 );
+		}
+
+		if ( class_exists( 'WC_Comments' ) ) {
+			add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+			add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_webhook_comments' ), 10, 1 );
+		}
+
+		if ( function_exists( 'wc_memberships' ) && is_object( wc_memberships()->get_query_instance() ) ) {
+			add_filter( 'comments_clauses', array( wc_memberships()->get_query_instance(), 'exclude_membership_notes_from_queries' ), 10, 1 );
+		}
+	}
+
+	/**
+	 * RE-adds several plugins' comment query modifications.
+	 *
+	 * @since  0.1.1
+	 *
+	 * @return void
+	 */
+	protected static function disable_plugin_comment_query_mods() {
+		if ( class_exists( 'Tribe__Events__Aggregator__Errors' ) ) {
+			$obj = \Tribe__Events__Aggregator__Errors::instance();
+			remove_action( 'pre_get_comments', array( $obj, 'hide_error_comments' ), 10 );
+			remove_filter( 'comments_clauses', array( $obj, 'hide_error_comments_pre_41' ), 10, 2 );
+		}
+
+		if ( class_exists( 'WC_Comments' ) ) {
+			remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+			remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_webhook_comments' ), 10, 1 );
+		}
+
+		if ( function_exists( 'wc_memberships' ) && is_object( wc_memberships()->get_query_instance() ) ) {
+			remove_filter( 'comments_clauses', array( wc_memberships()->get_query_instance(), 'exclude_membership_notes_from_queries' ), 10, 1 );
+		}
 	}
 
 }

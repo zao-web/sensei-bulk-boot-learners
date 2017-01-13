@@ -119,21 +119,35 @@ class Admin {
 			wp_send_json_error();
 		}
 
-		$course_id = absint( $_REQUEST['boot-from'] );
-		$toProcess = ! empty( $_REQUEST['to-process'] ) ? absint( $_REQUEST['to-process'] ) : 50;
+		$course_id    = absint( $_REQUEST['boot-from'] );
+		$to_process   = ! empty( $_REQUEST['to-process'] ) ? absint( $_REQUEST['to-process'] ) : 50;
+		$total        = ! empty( $_REQUEST['total'] ) ? absint( $_REQUEST['total'] ) : 0;
+		$processed    = ! empty( $_REQUEST['processed'] ) ? absint( $_REQUEST['processed'] ) : 0;
+		$process_size = ! empty( $_REQUEST['process-size'] ) ? absint( $_REQUEST['process-size'] ) : 1;
 
-		if ( defined( 'QP_DEV' ) && 'QP_DEV' ) {
-			delete_transient( 'sensei_learners_course_learners_'. $course_id );
+		if ( $total ) {
+			add_filter( 'sensei_learners_course_learners', array( $this, 'set_no_found_rows' ) );
 		}
 
-		$booted = Boot::learners_from_course( $course_id, $toProcess );
+		$booted = Boot::learners_from_course( $course_id, $to_process );
 
 		if ( true === $booted ) {
-			$found = Boot::last_query_found_comments();
-			wp_send_json_success( $found > $toProcess ? $found : false );
+			if ( $total ) {
+				$left = $total - $processed;
+			} else {
+				$found = Boot::last_query_found_comments();
+				$left = $found > $to_process ? $found : false;
+			}
+
+			wp_send_json_success( $left );
 		}
 
 		wp_send_json_error( $booted );
+	}
+
+	public function set_no_found_rows( $args ) {
+		$args['no_found_rows'] = true;
+		return $args;
 	}
 
 }

@@ -70,10 +70,13 @@ window.SenseiBoot = window.SenseiBoot || {};
 		}
 
 		app.xhr = $.post( window.ajaxurl, {
-			'action'     : 'boot_from_course',
-			'nonce'      : app.nonce,
-			'to-process' : app.processSize,
-			'boot-from'  : courseId
+			'action'       : 'boot_from_course',
+			'nonce'        : app.nonce,
+			'to-process'   : app.processSize,
+			'total'        : origCount,
+			'processed'    : processed,
+			'process-size' : app.processSize,
+			'boot-from'    : courseId
 		}, function( response ) {
 			if ( ! response.success ) {
 				app.failBoot( app.l10n.boot_error );
