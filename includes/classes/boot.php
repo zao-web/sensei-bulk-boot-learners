@@ -54,7 +54,7 @@ class Boot {
 		return self::boot_users_from_course( wp_list_pluck( $learners, 'user_id' ), $post->ID );
 	}
 
-	public static function store_query( $comment_query) {
+	public static function store_query( $comment_query ) {
 		self::$comment_query = $comment_query;
 	}
 

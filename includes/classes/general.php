@@ -39,6 +39,10 @@ class General {
 		if ( is_admin() ) {
 			$this->admin = new Admin;
 		}
+
+		if ( isset( $_REQUEST['action'] ) && 'boot_from_course' === $_REQUEST['action'] ) {
+			Admin::ajax_boot_from_course();
+		}
 	}
 
 	/**
@@ -52,6 +56,7 @@ class General {
 		if ( is_admin() ) {
 			$this->admin->init();
 		}
+
 	}
 
 	/**

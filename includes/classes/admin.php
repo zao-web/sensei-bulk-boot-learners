@@ -14,7 +14,6 @@ class Admin {
 		add_action( 'sensei_learners_main_column_data', array( $this, 'add_boot_button' ), 10, 2 );
 		add_action( 'sensei_page_sensei_learners', array( $this, 'maybe_boot_from_course' ), 10, 2 );
 		add_action( 'all_admin_notices', array( $this, 'show_boot_statuses' ), 10, 2 );
-		add_action( 'wp_ajax_boot_from_course', array( $this, 'ajax_boot_from_course' ), 10, 2 );
 	}
 
 	/**
@@ -61,6 +60,7 @@ class Admin {
 				'processing' => __( 'Processing %1$d of %2$d ', 'senseiboot' ),
 				'success'    => __( 'Success, all learners successfully booted from the course.', 'senseiboot' ),
 			),
+			'ajaxurl' => site_url(),
 		) );
 	}
 
@@ -111,11 +111,12 @@ class Admin {
 		return delete_option( 'senseiboot_success_message' );
 	}
 
-	public function ajax_boot_from_course() {
+	public static function ajax_boot_from_course() {
 		if (
 			empty( $_REQUEST['boot-from'] )
 			|| empty( $_REQUEST['nonce'] )
 			|| ! wp_verify_nonce( $_REQUEST['nonce'], SENSEIBOOT_URL )
+			|| ! current_user_can( apply_filters( 'senseiboot_can_boot_cap', 'manage_options' ) )
 		) {
 			wp_send_json_error();
 		}
@@ -127,7 +128,7 @@ class Admin {
 		$process_size = ! empty( $_REQUEST['process-size'] ) ? absint( $_REQUEST['process-size'] ) : 1;
 
 		if ( $total ) {
-			add_filter( 'sensei_learners_course_learners', array( $this, 'set_no_found_rows' ) );
+			add_filter( 'sensei_learners_course_learners', array( __CLASS__, 'set_no_found_rows' ) );
 		}
 
 		$booted = Boot::learners_from_course( $course_id, $to_process );
@@ -146,7 +147,7 @@ class Admin {
 		wp_send_json_error( $booted );
 	}
 
-	public function set_no_found_rows( $args ) {
+	public static function set_no_found_rows( $args ) {
 		$args['no_found_rows'] = true;
 		return $args;
 	}
