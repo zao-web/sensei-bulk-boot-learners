@@ -53,8 +53,9 @@ class Admin {
 		wp_enqueue_style( 'senseiboot-admin', SENSEIBOOT_URL . "assets/css/sensei-bulk-boot-learners{$min}.css", array(), SENSEIBOOT_VERSION );
 		wp_enqueue_script( 'senseiboot-admin', SENSEIBOOT_URL . "assets/js/sensei-bulk-boot-learners{$min}.js", array( 'jquery'	), SENSEIBOOT_VERSION, 1 );
 		wp_localize_script( 'senseiboot-admin', 'SenseiBoot', array(
-			'nonce' => wp_create_nonce( SENSEIBOOT_URL ),
-			'l10n' => array(
+			'nonce'  => wp_create_nonce( SENSEIBOOT_URL ),
+			'turtle' => defined( 'SENSEIBOOT_TURTLE' ) && SENSEIBOOT_TURTLE, // ?
+			'l10n'   => array(
 				'ajax_error' => __( 'Sorry, processing encountered an error and was stopped.', 'senseiboot' ),
 				'boot_error' => __( 'Failed to boot all learners from the course.', 'senseiboot' ),
 				'processing' => __( 'Processing %1$d of %2$d ', 'senseiboot' ),

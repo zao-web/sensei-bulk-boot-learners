@@ -40,7 +40,7 @@ window.SenseiBoot = window.SenseiBoot || {};
 
 		var $loadRow = $tr.next();
 		var processed = app.processed + app.processSize;
-		var origCount, width;
+		var origCount, width, turtle;
 
 		if ( ! $loadRow.hasClass( 'boot-loading-row' ) ) {
 			origCount = $tr.find( '.column-num_learners' ).text();
@@ -50,7 +50,11 @@ window.SenseiBoot = window.SenseiBoot || {};
 				return false;
 			}
 
-			$loadRow = $( '<tr class="boot-loading-row" data-origcount="'+ origCount +'"><td colspan="'+ ( $tr.find( '> *' ).length - 1 ) +'"><div class="progress-bar"><span></span></div></td><td class="info">'+ app.l10n.processing.replace( '%1$d', '<span class="processed">'+ processed +'</span>' ).replace( '%2$d', '<span class="count">'+ origCount +'</span>' ) +'<div class="spinner is-active"></div></td></tr>' );
+			app.turtle = app.turtle ? '<em>🐢</em>' : '';
+			if ( app.turtle ) {
+				console.warn( 'WHEEEE! 🐢 🐢 🐢 🐢' );
+			}
+			$loadRow = $( '<tr class="boot-loading-row" data-origcount="'+ origCount +'"><td colspan="'+ ( $tr.find( '> *' ).length - 1 ) +'"><div class="progress-bar"><span class="progress-indicator">'+ app.turtle +'</span></div></td><td class="info">'+ app.l10n.processing.replace( '%1$d', '<span class="processed">'+ processed +'</span>' ).replace( '%2$d', '<span class="count">'+ origCount +'</span>' ) +'<div class="spinner is-active"></div></td></tr>' );
 
 			$tr.after( $loadRow );
 
