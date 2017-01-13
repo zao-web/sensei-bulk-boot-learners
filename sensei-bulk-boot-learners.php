@@ -36,7 +36,7 @@
  */
 
 // Useful global constants
-define( 'SENSEIBOOT_VERSION', '0.1.0' );
+define( 'SENSEIBOOT_VERSION', '0.1.0.0' );
 define( 'SENSEIBOOT_URL',     plugin_dir_url( __FILE__ ) );
 define( 'SENSEIBOOT_PATH',    dirname( __FILE__ ) . '/' );
 define( 'SENSEIBOOT_INC',     SENSEIBOOT_PATH . 'includes/' );

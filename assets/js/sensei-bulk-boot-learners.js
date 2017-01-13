@@ -6,7 +6,7 @@ window.SenseiBoot = window.SenseiBoot || {};
 ( function( window, document, $, app, undefined ) {
 	'use strict';
 
-	app.processSize = 5;
+	app.processSize = 2;
 	app.processed = 0;
 
 	app.init = function() {
