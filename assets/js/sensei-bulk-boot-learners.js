@@ -1,4 +1,4 @@
-/*! Sensei Bulk Boot Learners - v0.1.0
+/*! Sensei Bulk Boot Learners - v0.1.1
  * http://zao.is
  * Copyright (c) 2017; * Licensed GPL-2.0+ */
 window.SenseiBoot = window.SenseiBoot || {};

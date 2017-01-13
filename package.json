@@ -2,7 +2,7 @@
   "name": "sensei-bulk-boot-learners",
   "title": "Sensei Bulk Boot Learners",
   "description": "Provides tools/buttons for bulk booting users from courses",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "http://zao.is",
   "repository": {
     "type": "git",

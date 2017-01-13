@@ -5,7 +5,7 @@ Donate link:       http://zao.is
 Tags:              Sensei  
 Requires at least: 4.5  
 Tested up to:      4.7  
-Stable tag:        0.1.0  
+Stable tag:        0.1.1  
 License:           GPL-2.0+  
 License URI:       https://opensource.org/licenses/GPL-2.0  
 
@@ -41,6 +41,9 @@ If you offer seasonal training, it may make sense to reset the course enrollment
 !["Boot Learners" in progress](https://raw.githubusercontent.com/zao-web/sensei-bulk-boot-learners/master/screenshot-2.png)
 
 ## Changelog
+
+### 0.1.1
+* Query/Performance Improvements.
 
 ### 0.1.0
 * First release
