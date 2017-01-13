@@ -87,8 +87,17 @@ window.SenseiBoot = window.SenseiBoot || {};
 			if ( response.data ) {
 				app.processed = processed;
 
-				// Keep going.
-				app.triggerProcessing( $tr, courseId, response.data );
+				if ( 0 === processed % 12 ) {
+					console.warn( 'Let the server breathe...' );
+					window.setTimeout( function() {
+						console.warn( 'Ok, continue...' );
+						// Keep going.
+						app.triggerProcessing( $tr, courseId, response.data );
+					}, 5000 );
+				} else {
+					// Keep going.
+					app.triggerProcessing( $tr, courseId, response.data );
+				}
 			} else {
 				// Ok, we're done.
 				app.successfulBoot( $tr, $loadRow );
